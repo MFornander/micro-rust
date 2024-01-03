@@ -1,9 +1,6 @@
 name: CI
 run-name: Continuous Integration
-
-on:
-  workflow_dispatch:
-  push:
+on: [push, workflow_dispatch]
 
 permissions:
   contents: read
@@ -11,6 +8,7 @@ permissions:
 
 jobs:
   build:
+    name: build-test-upload
     runs-on: ubuntu-latest
 
     steps:

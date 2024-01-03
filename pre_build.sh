@@ -1,3 +1,3 @@
 #!/bin/sh
 
-echo "::info Starting build..."
+echo "::info::Building..."
