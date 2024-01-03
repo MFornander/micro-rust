@@ -1,5 +1,5 @@
 name: CI
-run-name: ${{ github.actor }} using Rust Continuous integration
+run-name: ${{ github.actor }} using Rust Continuous Integration
 
 on:
   workflow_dispatch:
@@ -18,16 +18,12 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-
-      - name: Check out repository code from ${{ github.repository }}
+      - name: "Check out repository: ${{ github.repository }} branch: ${{ github.ref }} by event: ${{ github.event_name }}"
         uses: actions/checkout@master
         with:
           persist-credentials: 'false'
 
-      - name: Compile and release
+      - name: "Compile and release on server: ${{ runner.os }}"
         uses: rust-build/rust-build.action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -37,6 +33,4 @@ jobs:
           PRE_BUILD: "pre_build.sh"
           POST_BUILD: "test/post_build.sh"
           ARCHIVE_NAME: micro-rust-archive.zip
-          UPLOAD_MODE: none
-
-      - run: echo "This job's status is ${{ job.status }}."
+          UPLOAD_MODE: release
