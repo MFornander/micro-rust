@@ -1,10 +1,9 @@
 name: CI
-run-name: ${{ github.actor }} using Rust Build
+run-name: Continuous Integration
 
 on:
   workflow_dispatch:
   push:
-  release:
 
 permissions:
   contents: read
@@ -20,9 +19,9 @@ jobs:
         with:
           persist-credentials: 'false'
 
-      - name: "Build on server: ${{ runner.os }}"
+      - name: "Build on ${{ runner.os }} server"
         id: compile
-        uses: rust-build/rust-build.action@master
+        uses: rust-build/rust-build.action@1.4.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -30,17 +29,13 @@ jobs:
           EXTRA_FILES: "README.md LICENSE"
           PRE_BUILD: "pre_build.sh"
           POST_BUILD: "test/post_build.sh"
+          ARCHIVE_NAME: ${{ github.repository }}-x86_64-linux-musl
+          MINIFY: false
           UPLOAD_MODE: none
 
-      - name: List Output
+      - name: List workspace
         run: |
           ls -alR ${{ github.workspace }}
 
       - name: Upload Artifact
         uses: actions/upload-artifact@main
-        with:
-          name: Binary
-          path: |
-            ${{ steps.compile.outputs.BUILT_ARCHIVE }}
-            ${{ steps.compile.outputs.BUILT_CHECKSUM }}
-
