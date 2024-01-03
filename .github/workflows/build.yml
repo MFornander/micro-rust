@@ -1,5 +1,4 @@
-name: CI
-run-name: ${{ github.actor }} using Rust Continuous integration
+
 
 on:
   workflow_dispatch:
