@@ -12,7 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: "Check out repository: ${{ github.repository }} branch: ${{ github.ref }} by event: ${{ github.event_name }}"
+      - name: "CI on repository: ${{ github.repository }} branch: ${{ github.ref }} by event: ${{ github.event_name }}"
+        run: |
+          ls -alR ${{ github.workspace }}
+
+      - name: "Check out repository"
         uses: actions/checkout@master
         with:
           persist-credentials: 'false'
