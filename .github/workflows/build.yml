@@ -1,0 +1,42 @@
+name: CI
+run-name: ${{ github.actor }} using Rust Continuous integration
+
+on:
+  workflow_dispatch:
+  push:
+  release:
+    types: [created]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+
+    steps:
+      - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
+      - name: Check out repository code
+        uses: actions/checkout@master
+        with:
+          persist-credentials: 'false'
+
+      - name: Compile and release
+        uses: rust-build/rust-build.action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          #RUSTTARGET: ${{ matrix.target }}
+          EXTRA_FILES: "README.md"
+          #SRC_DIR: "hello"
+          #ARCHIVE_TYPES: ${{ matrix.archive }}
+          PRE_BUILD: "pre_build.sh"
+          POST_BUILD: "test/post_build.sh"
+          MINIFY: "yes"
+
+      - run: echo "This job's status is ${{ job.status }}."
