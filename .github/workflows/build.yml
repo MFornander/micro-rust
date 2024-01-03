@@ -21,6 +21,7 @@ jobs:
           persist-credentials: 'false'
 
       - name: "Build on server: ${{ runner.os }}"
+        id: compile
         uses: rust-build/rust-build.action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -29,24 +30,17 @@ jobs:
           EXTRA_FILES: "README.md LICENSE"
           PRE_BUILD: "pre_build.sh"
           POST_BUILD: "test/post_build.sh"
-          #ARCHIVE_NAME: micro-rust-archive
+          UPLOAD_MODE: none
 
-      - name: "List Output"
+      - name: List Output
         run: |
-          ls ${{ github.workspace }}
+          ls -alR ${{ github.workspace }}
 
-  upload:
-    if: github.event_name == 'release'
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: "Upload Release"
-        uses: actions/upload-release-asset@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Artifact
+        uses: actions/upload-artifact@main
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: build/MyProject.zip
-          asset_name: MyProject.zip
-          asset_content_type: application/zip
+          name: Binary
+          path: |
+            ${{ steps.compile.outputs.BUILT_ARCHIVE }}
+            ${{ steps.compile.outputs.BUILT_CHECKSUM }}
+
