@@ -28,8 +28,8 @@ jobs:
 
       - name: Compile and release
         uses: rust-build/rust-build.action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        #env:
+        #  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           #RUSTTARGET: ${{ matrix.target }}
           EXTRA_FILES: "README.md"
