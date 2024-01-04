@@ -1,0 +1,21 @@
+syntax = "proto3";
+package api;
+
+service BooleanService {
+    rpc And(BooleanRequest) returns (BooleanResponse);
+    rpc Or(BooleanRequest) returns (BooleanResponse);
+  }
+
+enum BooleanOperator {
+  AND = 0;
+  OR = 1;
+}
+
+message BooleanRequest {
+  BooleanOperator op = 1;
+  repeated bool values = 2;
+}
+
+message BooleanResponse {
+  bool value = 1;
+}

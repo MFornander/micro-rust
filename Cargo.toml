@@ -1,8 +1,24 @@
 [package]
 name = "micro-rust"
 version = "0.1.0"
+authors = ["Mattias Fornander <mattias.fornander@gmail.com>"]
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+clap = { version = "4.0.29", features = ["derive"] }
+tokio = { version = "1.22.0", features = ["macros", "rt-multi-thread"] }
+prost = "0.11.3"
+tonic = "0.8.3"
+
+[build-dependencies]
+tonic-build = "0.8.4"
+
+# Server test binary
+[[bin]]
+name = "boolean-server"
+path = "src/server.rs"
+
+# Client test binary
+[[bin]]
+name = "boolean-client"
+path = "src/client.rs"
