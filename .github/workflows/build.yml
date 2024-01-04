@@ -27,7 +27,7 @@ jobs:
           EXTRA_FILES: "README.md LICENSE"
           PRE_BUILD: "pre_build.sh"
           POST_BUILD: "test/post_build.sh"
-          ARCHIVE_NAME: ${{ github.repository }}-x86_64-linux-musl
+          ARCHIVE_NAME: x86_64-linux-musl
           MINIFY: false
           UPLOAD_MODE: none
 
