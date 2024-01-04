@@ -1,10 +1,10 @@
 name: CI
 run-name: Continuous Integration
-on: [push, workflow_dispatch]
+on: push
 
 jobs:
   build:
-    name: build-unittest-upload
+    name: build-test
     runs-on: ubuntu-latest
 
     steps:
@@ -37,6 +37,9 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: x86_64-linux-musl.zip
-          path: ${{ steps.compile.outputs.BUILT_ARCHIVE }}
+          name: x86_64-linux-musl
           if-no-files-found: error
+          path: |
+            assets
+            ${{ steps.compile.outputs.BUILT_ARCHIVE }}
+            ${{ steps.compile.outputs.BUILT_CHECKSUM }}}
