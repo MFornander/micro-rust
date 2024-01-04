@@ -4,7 +4,7 @@ on: [push, workflow_dispatch]
 
 jobs:
   build:
-    name: build-test-upload
+    name: build-unittest-upload
     runs-on: ubuntu-latest
 
     steps:
@@ -27,7 +27,6 @@ jobs:
           EXTRA_FILES: "README.md LICENSE"
           PRE_BUILD: "pre_build.sh"
           POST_BUILD: "test/post_build.sh"
-          ARCHIVE_NAME: x86_64-linux-musl
           MINIFY: false
           UPLOAD_MODE: none
 
@@ -38,5 +37,6 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
+          name: x86_64-linux-musl.zip
           path: ${{ steps.compile.outputs.BUILT_ARCHIVE }}
           if-no-files-found: error
