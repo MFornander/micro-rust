@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: "CI on repository: ${{ github.repository }} branch: ${{ github.ref }} by event: ${{ github.event_name }}"
         run: |
-          ls -alR ${{ github.workspace }}
+          ls -alR
 
       - name: "Check out repository"
         uses: actions/checkout@master
