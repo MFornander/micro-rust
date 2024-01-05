@@ -12,30 +12,22 @@ pub struct Boolean {}
 
 #[tonic::async_trait]
 impl BooleanService for Boolean {
-    async fn and(
-        &self,
-        request: Request<BooleanRequest>,
-    ) -> Result<Response<BooleanResponse>, Status> {
-        for value in request.into_inner().values {
-            match value {
-                true => continue,
-                false => return Ok(Response::new(BooleanResponse { value: false })),
-            }
-        }
-        Ok(Response::new(BooleanResponse { value: true }))
+    async fn and(&self, request: Request<BooleanRequest>) -> Result<Response<BooleanResponse>, Status> {
+        let request = request.into_inner();
+        println!("Got AND request: {request:?}");
+
+        Ok(Response::new(BooleanResponse {
+            value: request.values.iter().all(|&v| v),
+        }))
     }
 
-    async fn or(
-        &self,
-        request: Request<BooleanRequest>,
-    ) -> Result<Response<BooleanResponse>, Status> {
-        for value in request.into_inner().values {
-            match value {
-                false => continue,
-                true => return Ok(Response::new(BooleanResponse { value: true })),
-            }
-        }
-        Ok(Response::new(BooleanResponse { value: false }))
+    async fn or(&self, request: Request<BooleanRequest>) -> Result<Response<BooleanResponse>, Status> {
+        let request = request.into_inner();
+        println!("Got OR request: {request:?}");
+
+        Ok(Response::new(BooleanResponse {
+            value: request.values.iter().any(|&v| v),
+        }))
     }
 }
 
@@ -45,7 +37,7 @@ impl BooleanService for Boolean {
 struct ServerCli {
     #[arg(short = 's', long = "server", default_value = "127.0.0.1")]
     server: String,
-    #[arg(short = 'p', long = "port", default_value = "50052")]
+    #[arg(short = 'p', long = "port", default_value = "50123")]
     port: u16,
 }
 
@@ -55,12 +47,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let addr = format!("{}:{}", cli.server, cli.port).parse()?;
     let boolean = Boolean::default();
 
-    println!("Bool server listening on {}", addr);
+    println!("Boolean server listening on {addr}");
 
-    Server::builder()
-        .add_service(BooleanServiceServer::new(boolean))
-        .serve(addr)
-        .await?;
+    Server::builder().add_service(BooleanServiceServer::new(boolean)).serve(addr).await?;
 
     Ok(())
 }

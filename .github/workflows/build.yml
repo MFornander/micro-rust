@@ -6,6 +6,7 @@ jobs:
   build:
     name: "Build & Test"
     runs-on: ubuntu-latest
+    container: rust:1.74-alpine3.18
 
     steps:
       - name: "CI on repository: ${{ github.repository }} branch: ${{ github.ref }} by event: ${{ github.event_name }}"
@@ -17,29 +18,9 @@ jobs:
         with:
           persist-credentials: 'false'
 
-      - name: "Build on ${{ runner.os }} server"
-        id: compile
-        uses: rust-build/rust-build.action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          RUSTTARGET: x86_64-unknown-linux-musl
-          EXTRA_FILES: "README.md LICENSE"
-          PRE_BUILD: "pre_build.sh"
-          POST_BUILD: "test/post_build.sh"
-          MINIFY: false
-          UPLOAD_MODE: none
-
-      - name: List workspace
+      - name: "Build and test on ${{ runner.os }} server"
         run: |
-          ls -alR ${{ github.workspace }}
+          apk add --no-cache musl-dev protobuf
+          cargo build
+          cargo test
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: x86_64-linux-musl
-          if-no-files-found: error
-          path: |
-            assets/
-            ${{ steps.compile.outputs.BUILT_ARCHIVE }}
-            ${{ steps.compile.outputs.BUILT_CHECKSUM }}

@@ -27,7 +27,7 @@ struct ClientCli {
     #[arg(short = 's', long = "server", default_value = "127.0.0.1")]
     server: String,
 
-    #[arg(short = 'p', long = "port", default_value = "50052")]
+    #[arg(short = 'p', long = "port", default_value = "50123")]
     port: u16,
 
     #[arg(value_parser = clap::builder::EnumValueParser::<BooleanOperator>::new())]
@@ -40,8 +40,7 @@ struct ClientCli {
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = ClientCli::parse();
-    let mut client =
-        BooleanServiceClient::connect(format!("http://{}:{}", cli.server, cli.port)).await?;
+    let mut client = BooleanServiceClient::connect(format!("http://{}:{}", cli.server, cli.port)).await?;
 
     let request = tonic::Request::new(BooleanRequest {
         op: cli.op as i32,
