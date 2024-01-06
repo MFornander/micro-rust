@@ -1,0 +1,9 @@
+# Buf Schema Registry - http://buf.build
+version: v1
+name: buf.build/mfornander/result
+breaking:
+  use:
+    - FILE
+lint:
+  use:
+    - DEFAULT

@@ -5,7 +5,13 @@
     },
     "customizations": {
         "vscode": {
-            "settings": {},
+            "settings": {
+                "protoc": {
+                    "options": [
+                        "--proto_path=${workspaceRoot}/proto"
+                    ]
+                }
+            },
             "extensions": [
                 "tamasfe.even-better-toml",
                 "rust-lang.rust-analyzer",

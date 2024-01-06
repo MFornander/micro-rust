@@ -1,0 +1,23 @@
+syntax = "proto3";
+package computemicro;
+import "baseresponse.proto";
+
+service Service {
+    rpc Compute(ComputeRequest) returns (ComputeResponse);
+}
+
+enum ComputeOperator {
+    COMPUTE_OPERATOR_UNSPECIFIED = 0;
+    COMPUTE_OPERATOR_AND = 1;
+    COMPUTE_OPERATOR_OR = 2;
+}
+
+message ComputeRequest {
+    ComputeOperator op = 1;
+    repeated bool inputs = 2;
+}
+
+message ComputeResponse {
+    optional baseresponse.Response response = 1;
+    bool output = 2;
+}
